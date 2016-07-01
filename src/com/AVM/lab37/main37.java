@@ -9,5 +9,8 @@ public class main37 {
         StringUtils.rightShift("ABCDE", 3);
         System.out.println(Integer.MIN_VALUE);
 
+
     }
 }
+
+
