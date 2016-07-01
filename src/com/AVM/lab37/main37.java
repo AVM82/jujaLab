@@ -6,8 +6,14 @@ package com.AVM.lab37;
 public class main37 {
     public static void main(String[] args) {
 
-        StringUtils.rightShift("ABCDE", 3);
-        System.out.println(Integer.MIN_VALUE);
+        String s = "ABCDE";
+        int offset = 3;
+
+        System.out.println(s);
+
+        System.out.println("Offset to right: "+ offset);
+
+        System.out.println(StringUtils.rightShift(s, offset));
 
 
     }
