@@ -5,98 +5,68 @@ package com.AVM.lab39;
  */
 
 public class TryWithResource {
-//    private AutoCloseable createResourceA() throws Throwable{
-//
-//    }
     public static void twoResource(AutoCloseableFactory factoryA, AutoCloseableFactory factoryB, TryBody body) throws Throwable {
-      /*BODY*/
-
 
         AutoCloseable resourceA;
-        AutoCloseable resourceB ;
-        try{
-            resourceA = factoryA.create();
-
-        }catch (Throwable createA){
-           throw createA;
-
-        }
-        try{
-            resourceB = factoryB.create();
-
-        }catch (Throwable createB){
-            try {
-
-                resourceA.close();
-            }catch (Throwable closeAEx){
-                createB.addSuppressed(closeAEx);
-
-            }
-
-            throw createB;
-
-        }
-
+        AutoCloseable resourceB;
+        resourceA = getResource(factoryA);
+        resourceB = getResource(factoryB,resourceA);
         try{
 
             body.runBody();
 
         }catch (Throwable bodyEx){
-
-            try {
-
-                resourceB.close();
-            }catch (Throwable closeBEx){
-                bodyEx.addSuppressed(closeBEx);
-
-            }
-            try {
-
-                resourceA.close();
-            }catch (Throwable closeAEx){
-                bodyEx.addSuppressed(closeAEx);
-
-            }
+            closeResources(resourceA,resourceB,bodyEx);
             throw bodyEx;
-
-
         }
-        try {
+        closeResources(resourceA,resourceB);
+    }
 
-            resourceB.close();
+    private static void closeResources(AutoCloseable first, AutoCloseable second) throws Exception {
+        try {
+            second.close();
         }catch (Throwable closeBEx){
             try {
-
-                resourceA.close();
+                first.close();
             }catch (Throwable closeAEx){
                 closeBEx.addSuppressed(closeAEx);
-
             }
             throw closeBEx;
-
+        }
+        first.close();
+    }
+    private static void closeResources(AutoCloseable first, AutoCloseable second, Throwable bodyEx){
+        try {
+            second.close();
+        }catch (Throwable closeBEx){
+            bodyEx.addSuppressed(closeBEx);
         }
         try {
-            resourceA.close();
-        }catch (Throwable closeA){
-            throw closeA;
-
+            first.close();
+        }catch (Throwable closeAEx){
+            bodyEx.addSuppressed(closeAEx);
         }
-
+    }
+    private static AutoCloseable getResource(AutoCloseableFactory factory,AutoCloseable resource) throws Throwable {
+        try{
+            return factory.create();
+        }catch (Throwable create){
+            try {
+                resource.close();
+            }catch (Throwable close){
+                create.addSuppressed(close);
+            }
+            throw create;
+        }
+    }
+    private static AutoCloseable getResource(AutoCloseableFactory factory) throws Throwable {
+            return factory.create();
     }
 }
-
-
-
-
-
-
 
 interface AutoCloseableFactory {
     public AutoCloseable create() throws Throwable;
 }
-
-
-
 interface TryBody {
     public void runBody() throws Throwable;
 }

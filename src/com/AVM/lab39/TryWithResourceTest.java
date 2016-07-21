@@ -32,6 +32,16 @@ public class TryWithResourceTest {
         assertEquals("OK",fourthTest());
 
     }
+    @Test
+    public void test5() throws Throwable {
+        assertEquals("OK",fifthTest());
+
+    }
+    @Test
+    public void test6() throws Throwable {
+        assertEquals("OK",sixthTest());
+
+    }
 
 }
 
