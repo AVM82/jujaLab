@@ -8,11 +8,20 @@ import java.util.Stack;
 public class ReverseString {
 
     public static void main(String[] args) {
-        String candidate = "Строка для разворота.";
-        System.out.println(reverseByArray(candidate));
-        System.out.println(reverseByStack(candidate));
-        System.out.println(reverseByStringBuilder(candidate));
-        System.out.println(Reverse(candidate));
+        String str1 = "123\uD852\uDDF0";
+        String expected = "\uD852\uDDF0321";
+
+
+
+        System.out.println(expected.equals(reverseByArray(str1)));
+        System.out.println("input:\t\t"+str1);
+        System.out.println("expected:\t"+expected);
+        System.out.println("*********************************");
+        System.out.println(reverseByArray(str1));
+        System.out.println(reverseByStack(str1));
+        System.out.println(reverseByStringBuilder(str1));
+        System.out.println(Reverse(str1));
+
 
     }
 
